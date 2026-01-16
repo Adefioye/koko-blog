@@ -1,0 +1,53 @@
+---
+title: Sample Post (Edit Me)
+date: '2026-01-16'
+tags: ['guide', 'sample', 'mdx']
+draft: false
+summary: A short reference post showing how to write and publish a new blog entry.
+---
+
+This is the only sample post left in the repo. Use it as a template when you’re ready to publish.
+
+## 1) Create a new post
+
+Add a new file in `data/blog/`, for example `data/blog/my-first-post.mdx`.
+
+Minimum frontmatter:
+
+```yaml
+---
+title: My First Post
+date: '2026-01-16'
+tags: ['ai', 'notes']
+draft: false
+summary: One or two sentences that show up in previews.
+---
+```
+
+Tips:
+- Set `draft: true` if you don’t want it to appear on the site yet.
+- The URL comes from the filename (and any folders) under `data/blog/`.
+
+## 2) Markdown + MDX examples
+
+### Code block
+
+```ts
+export function hello(name: string) {
+  return `Hello ${name}`
+}
+```
+
+### Links
+
+- External link: [Google Scholar](https://scholar.google.com/)
+- Internal link: `/about`
+
+### Images (optional)
+
+If you add an image to `public/static/images/your-image.png`, you can reference it like:
+
+```mdx
+![Alt text](/static/images/your-image.png)
+```
+
