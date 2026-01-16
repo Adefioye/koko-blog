@@ -1,11 +1,10 @@
-import Link from './Link'
 import siteMetadata from '@/data/siteMetadata'
 import SocialIcon from '@/components/social-icons'
 
 export default function Footer() {
   return (
-    <footer>
-      <div className="mt-16 flex flex-col items-center">
+    <footer className="mt-16 border-t border-gray-200 dark:border-gray-700">
+      <div className="flex flex-col items-center pt-10 pb-12">
         <div className="mb-3 flex space-x-4">
           <SocialIcon kind="mail" href={`mailto:${siteMetadata.email}`} size={6} />
           <SocialIcon kind="github" href={siteMetadata.github} size={6} />
@@ -17,17 +16,8 @@ export default function Footer() {
             <SocialIcon kind="twitter" href={siteMetadata.twitter} size={6} />
           )}
         </div>
-        <div className="mb-2 flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
-          <div>{siteMetadata.author}</div>
-          <div>{` • `}</div>
-          <div>{`© ${new Date().getFullYear()}`}</div>
-          <div>{` • `}</div>
-          <Link href="/">{siteMetadata.title}</Link>
-        </div>
-        <div className="mb-8 text-sm text-gray-500 dark:text-gray-400">
-          <Link href="https://github.com/timlrx/tailwind-nextjs-starter-blog">
-            Tailwind Nextjs Theme
-          </Link>
+        <div className="text-sm text-gray-500 dark:text-gray-400">
+          © {new Date().getFullYear()} {siteMetadata.author}
         </div>
       </div>
     </footer>
