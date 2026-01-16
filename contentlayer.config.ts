@@ -142,6 +142,7 @@ export const Authors = defineDocumentType(() => ({
     bluesky: { type: 'string' },
     linkedin: { type: 'string' },
     github: { type: 'string' },
+    scholar: { type: 'string' },
     layout: { type: 'string' },
   },
   computedFields,
