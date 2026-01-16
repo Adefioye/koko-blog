@@ -44,6 +44,20 @@ const SocialIcon = ({ kind, href, size = 8 }: SocialIconProps) => {
     return null
 
   const SocialSvg = components[kind]
+  const sizeClass =
+    size === 4
+      ? 'h-4 w-4'
+      : size === 5
+        ? 'h-5 w-5'
+        : size === 6
+          ? 'h-6 w-6'
+          : size === 7
+            ? 'h-7 w-7'
+            : size === 8
+              ? 'h-8 w-8'
+              : size === 10
+                ? 'h-10 w-10'
+                : 'h-8 w-8'
 
   return (
     <a
@@ -54,7 +68,7 @@ const SocialIcon = ({ kind, href, size = 8 }: SocialIconProps) => {
     >
       <span className="sr-only">{kind}</span>
       <SocialSvg
-        className={`hover:text-primary-500 dark:hover:text-primary-400 fill-current text-gray-700 dark:text-gray-200 h-${size} w-${size}`}
+        className={`${sizeClass} hover:text-primary-500 dark:hover:text-primary-400 fill-current text-gray-700 dark:text-gray-200`}
       />
     </a>
   )
