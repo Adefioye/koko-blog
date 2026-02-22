@@ -9,23 +9,23 @@ summary: A small reproduction of the concept detection results of (Shafran et al
 ## Motivation
 My goal is to reproduce and extend the essential results in Shafran et al., 2025 paper on the decomposition
 of MLP activations using semi non-negative matrix factorization(SNMF) [1]. SNMF is an unsupervised method for 
-improving the interpretability of LLMs. The paper successfully used the technique for concept detection
-and causal steering evalation. To test some of the results on concept evaluation, I will be evaluating 2 
+improving the interpretability of LLMs. The paper claimed to have successfully used the technique for concept detection
+and causal steering evaluation. To test some of the results on concept evaluation, I will be evaluating 2 
 research questions. Firstly, how does training SNMF on mlp and residual stream impact concept detection? Secondly,
-how does the number of top-activation tokens impact concept detection?
+how does the number of top-activated tokens impact concept detection?
 
 ## Experimental procedure and Methodology
-SNMF has a factorization objective, $A \approx ZY$. $Z \in \mathbb{R}^{d_a \times k}, \quad Y \in \mathbb{R}_{\ge 0}^{k \times n}$.
-It essentially minimizes reconstruction loss using $\mathcal{L}(Z, Y) = \left\| A - Z Y \right\|_F^2$.
+SNMF decomposes activations using, $A \approx ZY$. $Z \in \mathbb{R}^{d_a \times k}, \quad Y \in \mathbb{R}_{\ge 0}^{k \times n}$.
+Its objective is to minimize reconstruction loss using $\mathcal{L}(Z, Y) = \left\| A - Z Y \right\|_F^2$.
 
 The following are the series of steps required to test out my research questions.
 - Train MLP and residual stream activations using SNMF on concepts dataset.
 - Several k features were used such as 100, 200, 300 and 400.
 - Using a predefined prompt, `gpt-4o-mini` is used to create natural language description of the concept encoded by MLP
-or residual stream feature.
+or residual stream features.
 - For every concept description generated per feature, `gpt-4o-mini` is used to generate 5 activating and neutral sentences.
-- Feed sentences to model(gpt2-small) and capture MLP and residual stream activations per layer.
-- Lastly, compute concept detection score, $\log\!\left(\frac{a_{\mathrm{activating}}}{a_{\mathrm{neutral}}}\right)$.
+- Sentences are then fed into the model(gpt2-small) and MLP and residual stream activations are captured per layer.
+- Lastly, concept detection score is computed, $\log\!\left(\frac{a_{\mathrm{activating}}}{a_{\mathrm{neutral}}}\right)$.
 
 ## Research Question 1
 The paper only tested SNMF on MLP activations. So, I thought it would be cool to see if training on residual
@@ -33,19 +33,19 @@ stream is better. So I asked how does training SNMF on mlp and residual stream i
 
 ![Plot of concept detection vs layers for different number of features](/static/images/snmf-1/scd-layer-k.png)
 
-Overall, training on MLP activations performed better residual stream. This is surprising as residual stream is a more enriched
-representation. In addition, in spite of the number of features, concept detection did better at `layer 0`. At early layer, concepts 
-are disentangle so they are easier to separate out into different feature directions[1].
+Overall, training on MLP activations performed better than residual stream. This is surprising as residual stream is a more enriched
+representation. In addition, in spite of the number of features, concept detection did better at `layer 0`. The logic here is that, at early layer, concepts 
+are disentangled so they are easier to separate out into different feature directions[1].
 
 ## Research Question 2 
-Based on the findings [here](https://openaipublic.blob.core.windows.net/neuron-explainer/paper/index.html), it is believed the number of
-top-activating sequence has a significant impact on the quality of concept description of the explainer model(gpt2-small in this case). Hence,
-I tried to ask the question, how does the number of top-activating tokens impact quality of concept description and ultimately concept detection?
+Based on the findings [here](https://openaipublic.blob.core.windows.net/neuron-explainer/paper/index.html)[2], it is believed the number of
+top-activating sequence has a significant impact on the quality of concept description of the explainer model(gpt-4o-mini in this case). Hence,
+I tried to ask the question, how does the number of top-activating tokens impact quality of feature description and ultimately concept detection?
 
 ![Plot of concept detection vs number of top-activating tokens at different layers](/static/images/snmf-1/scd-top_m-layer.png)
 
 In this context, across `layer 0, 6, 11`, there is not a stark difference in concept detection scores from 0-10 top-activated tokens.
-However, in both layer 6 and 11. They have the most concept detection score and are approximately the same on average at top-6 and top-8 activated tokens.
+However, in both layer 6 and 11, the most concept detection score are observed at top-6 and top-8 activated tokens and their respective scores approximately the same.
 
 ## Probing Questions 
 I have a couple of probing questions and some hypothesis in relation to my results.
@@ -54,10 +54,10 @@ my guess is that SNMF as is trained here and in the paper is fairly wrong? The d
 feature represents a token instead of how strongly a feature represents a token in a sample? The paper trained on activation, $A \in \mathbb{R}^{d_a \times seq\_len}$
 instead of $A \in \mathbb{R}^{d_a \times batch \times seq\_len}$. The former is as though, we are modeling frequency of tokens in the concept dataset instead of the latter 
 where we model tokens and their relationship in a sequence in the concept dataset. What we really want are features that encode cooncepts in the concept dataset
-and are able to make a distinction between different concepts and the different sentences representing same concept.
+and are able to make a distinction between different concepts and the different sentences/sequences expressing same concept.
 - Why is there a significant difference between concept detection scores in my experiment `gpt2-small` versus one obtained in the paper?
-I have positive scores around 0-0.3 while the paper has 0-3. This is about 10x magnitude difference. This is really a big difference.
-- Numbers were only reported for concept detection score. What are qualitative ways to show concepts encoded by the features and how they can be 
+I have positive scores around 0-0.3 while the paper has 0-3. This is about 10x magnitude difference. This is really a big difference!
+- Numbers were only reported for concept detection score. What are qualitative ways to show concepts encoded by the features and how can they be 
 traced back to the original concept dataset. This way we know we are not just modelling and testing noise.
 
 ## Further work
@@ -70,6 +70,10 @@ MLP activations perform significantly better at early layers than residual strea
 
 ## Code 
 Available [here](https://github.com/Adefioye/mech-interp-exploration/tree/main/snmf-mlp)
+
+## References
+1. Shafran, O., Geiger, A., & Geva, M. (2025). Decomposing MLP Activations into Interpretable Features via Semi-Nonnegative Matrix Factorization. ArXiv, abs/2506.10920.
+2. Bills, et al., "Language models can explain neurons in language models", 2023.
 
 ## Citation
 If you find this article useful, please cite it as:
