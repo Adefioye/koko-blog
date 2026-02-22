@@ -22,7 +22,7 @@ export default function Home({ posts }) {
           {posts.slice(0, MAX_DISPLAY).map((post) => {
             const { slug, date, title } = post
             return (
-              <li key={slug} className="py-12">
+              <li key={slug} className="py-4">
                 <article>
                   <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                     <dl>
@@ -32,7 +32,7 @@ export default function Home({ posts }) {
                       </dd>
                     </dl>
                     <div className="xl:col-span-3">
-                      <h2 className="text-2xl leading-8 font-bold tracking-tight">
+                      <h2 className="text-xl leading-8 font-bold tracking-tight">
                         <Link href={`/blog/${slug}`} className="text-gray-900 dark:text-gray-100">
                           {title}
                         </Link>
