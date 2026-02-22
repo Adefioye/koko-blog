@@ -15,10 +15,10 @@ research questions. Firstly, how does training SNMF on mlp and residual stream i
 how does the number of top-activated tokens impact concept detection?
 
 ## Experimental procedure and Methodology
-SNMF decomposes activations using, $A \approx ZY$. $Z \in \mathbb{R}^{d_a \times k}, \quad Y \in \mathbb{R}_{\ge 0}^{k \times n}$.
+SNMF decomposes activations using, $A \approx ZY$. $Z \in \mathbb{R}^{mlp\_dim \times k}, \quad Y \in \mathbb{R}_{\ge 0}^{k \times n}$.
 Its objective is to minimize reconstruction loss using $\mathcal{L}(Z, Y) = \left\| A - Z Y \right\|_F^2$.
 
-The following are the series of steps required to test out my research questions.
+The following are the series of steps required to test out my research questions[1].
 - Train MLP and residual stream activations using SNMF on concepts dataset.
 - Several k features were used such as 100, 200, 300 and 400.
 - Using a predefined prompt, `gpt-4o-mini` is used to create natural language description of the concept encoded by MLP
