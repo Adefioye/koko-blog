@@ -50,17 +50,17 @@ The weak correlations in VP-(100, 50, 25, 10) as shown in the `Table 1` can be f
 
 Generally, as k increases, the stronger the correlation and the more likely VP-k will correctly predict model's knowledge of a subject. However, there appears to be a slight drop at `k=50` before continuing the uptrend. This is slightly different from what's obtained in the paper which is normally smoothly increasing before plateauing at around `k=50257`.
 
-![VP-k correlation plot](/static/images/vp_k_corr.png)
+![VP-k correlation plot](/static/images/keen-repro/vp_k_corr.png)
 
 For HS(residual stream)/MLP, the slopes are around 0.3 meaning that the probe’s predictions move in the right direction as true QA accuracy increases (i.e it is monotonic), but the movement is somewhat compressed. The probe tends to predict scores in a narrower band (e.g. 0.15-0.50) rather than spanning 0-1, which is why the fit is far from y=x even though correlation can still be reasonably high. However, the slope for VP-50 is near-zero (0.024) showing that there is a collapse in its predictive power. In contrast with KEEN paper's findings, residual stream and MLP have better knowledge estimation power when compared to VP-50 representation. Nevertheless, VP-50's predictive power can be improved through hyperparameter tuning.
 
-![Scatter plot](/static/images/scatter-plot-corr.png)
+![Scatter plot](/static/images/keen-repro/scatter-plot-corr.png)
 
 ## Analysis of positively and negatively weighted tokens
 
 We identify the tokens associated with the largest top-50 absolute weights for `full logits(VP-50257)` probe because they have most effect on the predicted score. Next, for VP-50, we compare the median rank of tokens with positive and negative weights in the vocabulary space for subjects with high QA accuracy (1.0) and low QA accuracy (0.0). For low QA accuracy subjects, the median rank of negative weight tokens is generally higher than that of positive weight tokens. On the contrary, for high QA accuracy subjects, the median rank of negative weight tokens is generally lower than that of positive weight tokens. Please note, the higher the rank, the lower the number. For example, 0 has the highest rank. Ultimately, based on the plot in `Figure 2`, there is still about "__>15000__" tokens that differentiates between subjects the model knows about and those it does not know much about.
 
-![Median rank difference plot](/static/images/median-rank-diff.png)
+![Median rank difference plot](/static/images/keen-repro/median-rank-diff.png)
 
 > Figure 2: Distribution of median rank difference for low and high qa accuracy subjects
 
@@ -77,10 +77,10 @@ If you find this article useful, please cite it as:
 
 ```
 @article{abdulhakeem2026keen-paper-reproduction,
-  title={Reproduction of the KEEN paper on estimation of knowledge on QA dataset},
+  title={How does the type of activations and number of top activating tokens affect concept detection in LLMs},
   author={Abdulhakeem, Adefioye},
   year={2026},
-  month={January},
-  url={"https://adefioye.github.io/koko-blog/blog/keen-paper-repro"}
+  month={February},
+  url={"https://adefioye.github.io/koko-blog/blog/snmf-1"}
 }
 ```
