@@ -49,12 +49,6 @@ However, in both layer 6 and 11, the most concept detection score are observed a
 
 ## Probing Questions 
 I have a couple of probing questions and some hypothesis in relation to my results.
-- Why does the result perform better with mlp activations over residual stream, in spite of the latter being a more feature-rich representation?
-my guess is that SNMF as is trained here and in the paper is fairly wrong? The decomposed matrix, $Y$ has entry that shows how strongly
-a feature represents a token instead of how strongly a feature represents a token in a sample? The paper trained on activation, $A \in \mathbb{R}^{mlp\_dim \times seq\_len}$
-instead of $A \in \mathbb{R}^{mlp\_dim \times batch \times seq\_len}$. The former is as though, we are modeling frequency of tokens in the concept dataset instead of the latter 
-where we model tokens and their relationship in a sequence in the concept dataset. What we really want are features that encode concepts in the dataset
-and are able to make a distinction between different concepts and the different sentences/sequences expressing same concept.
 - Why is there a significant difference between concept detection scores in my experiment for `gpt2-small` versus one obtained in the paper?
 The biggest score is about 0.3 while the paper has its biggest score for `gpt2-small` at 3. This is about 10x magnitude difference. This is really a big difference. I believe enough to invalidate the claims of the paper. Will be holding off on this till I compare results with that of SAEs.
 - Numbers were only reported for concept detection score. What are qualitative ways to show concepts truly encoded by the SNMF features and how can they be 
