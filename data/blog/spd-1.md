@@ -1,0 +1,68 @@
+---
+title: 'SPD 1: Analysis of component activations of deep toy model of superposition'
+date: '2026-04-16'
+tags: ['llm', 'residual stream', 'mlp', 'concept detection', 'gpt2-small']
+draft: false
+summary: Analysing patterns of component activations on 2-6L tied and untied SPD-based decomposed TMS models.
+---
+
+## Motivation
+This is the beginning of a series of post at experimenting with SPD(Stochastic Parameter Decomposition). This is a technique that allows for decomposing weights of a network into rank-1 matrices [1]. These rank-1 matrices are computational units that help in the transformation of model inputs into outputs. The beauty of this technique is that it helps in advancing our efforts toward fully decompiling networks and making them highly interpretable.
+
+## Experiments
+The SPD paper worked on 2L tied toy model of superposition(TMS). However, we thought for a start it would be nice to experiment with deeper TMS models both tied and untied. Due to this, we trained 2-6L tied and untied models with 5 input features and 2 hidden dimension. This is acronymed as `TMS-5-2` model.
+
+### Tied models
+>Tied models are models whose first and last layer weights are the same. However, untied layer weights are not the same.
+#### 2L tied
+Just like the experiment performed in the SPD paper. Each feature in the input is activated by one component in the first and last layer. Due to this, the vast majority of the components are dead, that is, they do not get activated for any of the 5 features in the input.
+
+![2L tied](./2L-tied.png)
+_Figure 1:_ Causal importance of rank-1 components over features in 2L tied model
+#### 5L tied
+It is worthy of note to state at this point that, we have observed selective and monosemantic components  for `first and last layer` in the 2L case, we have also observed same behavior in 3L and 4L tied models even though there are polysemantic components in the hidden layers of these deeper models.
+
+Nevertheless, we begin to observe polysemantic components at the tied layers(first and last layer) in 5L model. Ultimately, we noticed that as the models get increasingly deeper, the mechanism required to compute features gets increasingly distributed over many layers in spite of the sparsity of the features in the model.
+
+![5L tied](./5L-tied.png)
+_Figure 2:_ Causal importance of rank-1 components over features in 5L tied model
+### Untied models
+
+#### 2L untied
+Just like 2L tied model, there are many dead components. However, unlike 2L tied model, there are unrecovered features(feature 1 and 4), that is, features that do not activate any component. It is possible that these unrecovered features are not properly reconstructed in the target model. We also observed that there are no dedicated and selective components for every feature in the input for 2L untied model. This same behavior is observed in 3L untied model as well. 
+
+In 3L untied model, we begin to see polysemantic components in the hidden layer even though not present in first and last layer of the model. Feature 2 and 4 are also dead throughout the entire layer of the network.
+![2L untied](./2L-untied.png)
+_Figure 3:_ Causal importance of rank-1 components over features in 2L untied model
+#### 4L untied
+One of the beautiful observations in this model is the fact that polysemanticity occurs in the hidden layers and the same components activate for same kind of features. What this tells us is if clustering is done over the activated components, we would expect this same set of components spread over the hidden layers to fall in the same cluster. This pattern of activation is also observed in the first and last layer even though components are monosemantic. Worthy of note is that feature 2 seems unrecovered/unrepresented in this entire network.
+
+![4L untied](./4L-untied.png)
+_Figure 4:_ Causal importance of rank-1 components over features in 4L untied model
+#### 6L untied
+We observe the same pattern of feature activation seen in 4L untied model here as well. All hidden layers displayed polysemanticity with components activating same kind of features. Meanwhile, first and last layer have same kind of feature activation as well and monosemantic. We would love to note that in 5L untied model not shown here, all hidden layers have same pattern of activations. However, the first and last layer have different pattern of feature activation.
+
+Ultimately, feature 2 remain unrepresented in 5 and 6L untied model. It remains to be seen if adding more layers or tweaking SPD loss hyperparameters would be sufficient to tease out a component that would activate feature 2.
+
+![6L untied](./6L-untied.png)
+
+## Conclusion
+SPD offers a promising approach in directly creating circuits/mechanisms/rank-1 components that are responsible for transforming data inputs. We have also observed the phenomenon of polysemanticity of components and distributed nature of computations over many and different layers of the network.
+
+## References
+1. Bushnaq, L., Braun, D., & Sharkey, L. (2025). Stochastic parameter decomposition. arXiv preprint arXiv:2506.20790.
+
+## Citation
+If you find this article useful, please cite it as:
+
+#### BibTex
+
+```
+@article{abdulhakeem2026snmf-1,
+  title={Analysis of component activations of deep toy model of superposition},
+  author={Abdulhakeem, Adefioye},
+  year={2026},
+  month={April},
+  url={"https://adefioye.github.io/koko-blog/blog/spd-1"}
+}
+```
